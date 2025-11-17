@@ -2,12 +2,19 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+
   images: {
-    domains: ["cdn.sanity.io"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",
+      },
+    ],
     formats: ["image/avif", "image/webp"],
   },
+
   experimental: {
-    optimizeCss: true,
+    optimizeCss: true, // requires critters
   },
 };
 

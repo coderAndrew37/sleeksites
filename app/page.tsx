@@ -1,15 +1,41 @@
-import { JSX } from "react";
+import { client } from "@/lib/sanity";
+import Hero from "./components/sections/Hero";
+import SocialProof from "./components/sections/SocialProof";
+import Services from "./components/sections/Services";
+import Results from "./components/sections/Results";
+import Portfolio from "./components/sections/Portfolio";
+import Testimonials from "./components/sections/Testimonials";
+import { BlogSection } from "./components/sections/BlogSection";
 import CTA from "./components/sections/CTA";
 import FAQ from "./components/sections/FAQ";
-import Hero from "./components/sections/Hero";
-import Portfolio from "./components/sections/Portfolio";
-import Results from "./components/sections/Results";
-import Services from "./components/sections/Services";
-import SocialProof from "./components/sections/SocialProof";
-import Testimonials from "./components/sections/Testimonials";
 import Layout from "./components/layout/Layout";
 
-export default function Home(): JSX.Element {
+export default async function Home() {
+  const blogPostsQuery = `*[_type == "post" && publishedAt < now()] 
+    | order(publishedAt desc)[0...3] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      mainImage,
+      publishedAt,
+      readTime,
+      "author": author->{
+        name,
+        role
+      },
+      "categories": categories[]->{
+        title,
+        slug
+      }
+    }`;
+
+  const blogPosts = await client.fetch(
+    blogPostsQuery,
+    {},
+    { next: { revalidate: 3600 } }
+  );
+
   return (
     <Layout
       title="SleekSites Kenya - High-Converting Websites & Digital Marketing"
@@ -21,6 +47,7 @@ export default function Home(): JSX.Element {
       <Results />
       <Portfolio />
       <Testimonials />
+      <BlogSection posts={blogPosts} />
       <CTA />
       <FAQ />
     </Layout>
