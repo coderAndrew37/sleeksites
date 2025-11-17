@@ -2,30 +2,23 @@ import { client } from "@/lib/sanity";
 import BlogPageClient from "./BlogClient";
 
 export default async function BlogPage() {
-  // Fetch posts
-  const postsQuery = `*[_type == "post" && publishedAt < now()] | order(publishedAt desc) {
-    _id,
-    title,
-    slug,
-    excerpt,
-    mainImage,
-    publishedAt,
-    readTime,
-    "author": author->{
-      name,
-      role
-    },
-    "categories": categories[]->{
+  const postsQuery = `*[_type == "post" && publishedAt < now()] 
+    | order(publishedAt desc) {
+      _id,
       title,
-      slug
-    }
-  }`;
+      excerpt,
+      readTime,
+      publishedAt,
+      slug,
+      mainImage,
+      "author": author->{ name, role },
+      "categories": categories[]->{ title, slug }
+    }`;
 
-  // Fetch categories
-  const categoriesQuery = `*[_type == "category"] {
+  const categoriesQuery = `*[_type == "category"]{
     title,
     slug
-  }`;
+  } | order(title asc)`;
 
   const [posts, categories] = await Promise.all([
     client.fetch(postsQuery),

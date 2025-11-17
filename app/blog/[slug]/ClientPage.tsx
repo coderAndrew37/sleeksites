@@ -1,4 +1,3 @@
-// app/blog/[slug]/ClientPage.tsx
 "use client";
 
 import { AuthorBio } from "@/app/components/blog/AuthorBio";
