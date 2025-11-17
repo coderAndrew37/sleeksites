@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { BlogPost, Category } from "../components/types/blog";
 import Layout from "../components/layout/Layout";
@@ -20,12 +19,12 @@ export default function BlogPageClient({ posts, categories }: BlogPageProps) {
     .filter((post) => {
       const matchesCategory =
         selectedCategory === "all" ||
-        post.categories.some((cat) => cat.slug === selectedCategory);
+        post.categories?.some((cat) => cat.slug === selectedCategory);
 
       const matchesSearch =
         post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.categories.some((cat) =>
+        post.categories?.some((cat) =>
           cat.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
@@ -132,7 +131,7 @@ export default function BlogPageClient({ posts, categories }: BlogPageProps) {
                         >
                           {
                             posts.filter((post) =>
-                              post.categories.some(
+                              post.categories?.some(
                                 (cat) => cat.slug === category.slug
                               )
                             ).length

@@ -15,15 +15,17 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
     day: "numeric",
   });
 
+  const hasCategories =
+    Array.isArray(post.categories) && post.categories.length > 0; // why: avoid null.length crash
+
   return (
     <article
       className={`bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden group ${
         featured ? "md:col-span-2" : ""
       }`}
     >
-      {/* Post Image */}
       <Link
-        href={`/blog/${post.slug}`}
+        href={`/blog/${post.slug?.current}`}
         className="block relative h-48 overflow-hidden"
       >
         {post.mainImage ? (
@@ -49,19 +51,19 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
             <div className="text-white text-2xl font-bold">SS</div>
           </div>
         )}
-        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
 
         {/* Category Badge */}
-        {post.categories.length > 0 && (
+        {hasCategories && (
           <div className="absolute top-4 left-4">
             <span className="bg-white text-blue-700 px-3 py-1 rounded-full text-sm font-semibold capitalize">
-              {post.categories[0].title}
+              {post.categories && post.categories[0]?.title}
             </span>
           </div>
         )}
       </Link>
 
-      {/* Post Content */}
       <div className="p-6">
         <div className="flex items-center text-sm text-gray-500 mb-3">
           <span>{publishedDate}</span>
@@ -74,7 +76,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
             featured ? "text-2xl" : "text-xl"
           }`}
         >
-          <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+          <Link href={`/blog/${post.slug?.current}`}>{post.title}</Link>
         </h2>
 
         <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
@@ -95,7 +97,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
           </div>
 
           <Link
-            href={`/blog/${post.slug}`}
+            href={`/blog/${post.slug?.current}`}
             className="text-blue-700 font-semibold text-sm hover:text-blue-800 transition-colors flex items-center"
           >
             Read More

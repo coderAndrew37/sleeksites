@@ -14,20 +14,24 @@ export interface Author {
 
 export interface Category {
   title: string;
-  slug: string;
+  slug: {
+    current: string;
+  };
 }
 
 export interface BlogPost {
   _id: string;
   title: string;
-  slug: string;
+  slug: {
+    current: string;
+  };
   excerpt: string;
   body: any[];
   mainImage: CustomImage | null;
   author: Author;
   publishedAt: string;
   readTime: number;
-  categories: Category[];
+  categories: Category[] | null; // correct type
   featured: boolean;
   seo?: {
     metaTitle?: string;
